@@ -20,3 +20,4 @@ You can join our Discord server, 'Monkeytype Projects' by clicking [here](https:
 
 # License
 Our project uses the MIT License, to view the license, you can click [this](https://github.com/kiirod/mtnamecheck/blob/main/LICENSE)
+
