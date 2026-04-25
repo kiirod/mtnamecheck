@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monkeytype Namecheck</title>
+      <link rel="icon" type="image/png" href="/site/mnc.png">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #313338;
+            --main-color: #e2b714;
+            --text-dim: rgba(255, 255, 255, 0.5);
+            --pastel-red: #ff6961;
+            --pastel-green: #77dd77;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--main-color);
+            font-family: 'Roboto Mono', monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            width: 100%;
+            max-width: 600px;
+        }
+        
+        h1 { 
+            margin: 0 0 10px 0; 
+            font-size: 3.5rem; 
+            white-space: nowrap;
+        }
+        
+        .dimmed { 
+            color: var(--text-dim); 
+            font-size: 0.9rem; 
+            margin-bottom: 5px; 
+        }
+        
+        .link { 
+            color: var(--text-dim); 
+            text-decoration: none; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+        }
+
+        input {
+            background: #202225;
+            border: 2px solid var(--main-color);
+            color: white;
+            padding: 12px 15px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1rem;
+            border-radius: 3px;
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box;
+            text-align: left;
+        }
+
+        .result {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            font-size: 1.1rem;
+        }
+
+        .loading {
+    opacity: 0.5;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loading svg {
+    animation: spin 1.5s linear infinite;
+}
+
+
+.taken { color: rgba(255, 255, 255, 0.5); }
+.available { color: rgba(255, 255, 255, 0.5); }
+.error { color: rgba(255, 255, 255, 0.5); }
+
+
+        svg { width: 20px; height: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>mt namecheck</h1>
+        <div class="dimmed">Not affiliated with Miodec.</div>
+        
+        <a href="https://monkeytype.com" target="_blank" class="link">
+            monkeytype.com
+            <svg viewBox="0 0 512 512" fill="currentColor">
+                <path d="M128,63.999444 L128,106.666444 L42.6666667,106.666667 L42.6666667,320 L256,320 L256,234.666444 L298.666,234.666444 L298.666667,362.666667 L4.26325641e-14,362.666667 L4.26325641e-14,64 L128,63.999444 Z M362.666667,1.42108547e-14 L362.666667,170.666667 L320,170.666667 L320,72.835 L143.084945,249.751611 L112.915055,219.581722 L289.83,42.666 L192,42.6666667 L192,1.42108547e-14 L362.666667,1.42108547e-14 Z"></path>
+            </svg>
+        </a>
+
+        <input type="text" id="usernameInput" maxlength="16" placeholder="enter username..." autocomplete="off">
+        
+        <div id="resultDisplay" class="result"></div>
+    </div>
+
+    <script>
+        const input = document.getElementById('usernameInput');
+        const resultDisplay = document.getElementById('resultDisplay');
+        let timeout = null;
+
+        input.addEventListener('input', (e) => {
+            e.target.value = e.target.value.replace(/[^a-z0-9]/gi, '');
+            const username = e.target.value;
+            
+            clearTimeout(timeout);
+            if (username.length === 0) {
+                resultDisplay.innerHTML = '';
+                return;
+            }
+            timeout = setTimeout(() => checkUsername(username), 500);
+        });
+async function checkUsername(username) {
+    try {
+        resultDisplay.className = 'result loading';
+        resultDisplay.innerHTML = `
+            <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none" class="hds-flight-icon--animation-loading"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"> <path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8z" opacity=".2"></path> <path d="M7.25.75A.75.75 0 018 0a8 8 0 018 8 .75.75 0 01-1.5 0A6.5 6.5 0 008 1.5a.75.75 0 01-.75-.75z"></path> </g> </g></svg>
+        `;
+
+        // mt api wont let u check miodec's user, sooo its just hardcoded to say its taken.
+        if (username.toLowerCase() === 'miodec') {
+            resultDisplay.className = 'result taken';
+            resultDisplay.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g clip-path="url(#clip0_429_11057)"> <path d="M5.63604 5.63598C4.00736 7.26466 3 9.51466 3 11.9999C3 16.9705 7.02944 20.9999 12 20.9999C14.4853 20.9999 16.7353 19.9926 18.364 18.3639M5.63604 5.63598C7.26472 4.0073 9.51472 2.99994 12 2.99994C16.9706 2.99994 21 7.02938 21 11.9999C21 14.4852 19.9926 16.7352 18.364 18.3639M5.63604 5.63598L18.364 18.3639" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path> </g> <defs> <clipPath id="clip0_429_11057"> <rect width="24" height="24" fill="white"></rect> </clipPath> </defs> </g></svg>
+                Username is taken.
+            `;
+            return;
+        }
+
+        // timeout after 15s
+        const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('timeout')), 15000)
+        );
+
+        const fetchPromise = fetch(`https://api.monkeytype.com/users/checkName/${username}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).then(r => r.json());
+
+        const data = await Promise.race([fetchPromise, timeoutPromise]);
+        
+        console.log("API Response:", data);
+
+        const isAvailable = data.data?.available;
+
+        if (isAvailable === false) {
+            resultDisplay.className = 'result taken';
+            resultDisplay.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g clip-path="url(#clip0_429_11057)"> <path d="M5.63604 5.63598C4.00736 7.26466 3 9.51466 3 11.9999C3 16.9705 7.02944 20.9999 12 20.9999C14.4853 20.9999 16.7353 19.9926 18.364 18.3639M5.63604 5.63598C7.26472 4.0073 9.51472 2.99994 12 2.99994C16.9706 2.99994 21 7.02938 21 11.9999C21 14.4852 19.9926 16.7352 18.364 18.3639M5.63604 5.63598L18.364 18.3639" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path> </g> <defs> <clipPath id="clip0_429_11057"> <rect width="24" height="24" fill="white"></rect> </clipPath> </defs> </g></svg>
+                Username is taken.
+            `;
+        } else if (isAvailable === true) {
+            resultDisplay.className = 'result available';
+            resultDisplay.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.8086 9.70558C18.1983 9.31421 18.1969 8.68105 17.8056 8.29137C17.4142 7.90169 16.781 7.90305 16.3913 8.29442L10.6215 14.0892L7.30211 10.816C6.90886 10.4283 6.27571 10.4327 5.88793 10.8259C5.50015 11.2192 5.50459 11.8524 5.89784 12.2401L9.92581 16.212C10.3177 16.5985 10.9482 16.5956 11.3366 16.2056L17.8086 9.70558Z" fill="currentColor"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M12 1C5.92487 1 1 5.92487 1 12C1 18.0751 5.92487 23 12 23C18.0751 23 23 18.0751 23 12C23 5.92487 18.0751 1 12 1ZM3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12Z" fill="currentColor"></path></svg>
+                Username is available.
+            `;
+        }
+    } catch (err) {
+        console.error("API Fetch Error:", err);
+        
+        if (err.message === 'timeout') {
+            resultDisplay.className = 'result taken';
+            resultDisplay.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g clip-path="url(#clip0_429_11057)"> <path d="M5.63604 5.63598C4.00736 7.26466 3 9.51466 3 11.9999C3 16.9705 7.02944 20.9999 12 20.9999C14.4853 20.9999 16.7353 19.9926 18.364 18.3639M5.63604 5.63598C7.26472 4.0073 9.51472 2.99994 12 2.99994C16.9706 2.99994 21 7.02938 21 11.9999C21 14.4852 19.9926 16.7352 18.364 18.3639M5.63604 5.63598L18.364 18.3639" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path> </g> <defs> <clipPath id="clip0_429_11057"> <rect width="24" height="24" fill="white"></rect> </clipPath> </defs> </g></svg>
+                Your WiFi is too slow, please try again later.
+            `;
+        } else {
+            resultDisplay.className = 'result error';
+            resultDisplay.innerHTML = `Something went wrong. Check F12 Console.`;
+        }
+    }
+}
+
+    </script>
+</body>
+</html>
