@@ -9,6 +9,7 @@
     <style>
         :root {
             --bg-color: #313338;
+            --btn-bg: #474a51;
         }
 
         body {
@@ -22,6 +23,7 @@
             height: 100vh;
             margin: 0;
             padding: 20px;
+            overflow: hidden; 
         }
 
         .container { 
@@ -33,10 +35,32 @@
         }
         
         h1 { 
-            margin: 0; 
+            margin: 0 0 20px 0; 
             font-size: 12rem; 
             white-space: nowrap;
             font-weight: bold;
+        }
+
+        .home-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--btn-bg);
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: background-color 0.2s;
+        }
+
+        .home-button:hover {
+            background-color: #555860;
+        }
+
+        .home-button svg {
+            width: 16px;
+            height: 16px;
         }
     </style>
 </head>
@@ -44,6 +68,12 @@
 
     <div class="container">
         <h1>404!</h1>
+        <a href="/" class="home-button">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M8 0L0 6V8H1V15H4V10H7V15H15V8H16V6L14 4.5V1H11V2.25L8 0ZM9 10H12V13H9V10Z" fill="#ffffff"></path>
+            </svg>
+            Go Home
+        </a>
     </div>
 
 </body>
